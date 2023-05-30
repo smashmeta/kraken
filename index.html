@@ -1,0 +1,59 @@
+<html>
+<head>
+<title>A Map With Events</title>
+</head>
+
+<body>
+<h1 id="header_1">A Map With Events</h1>
+
+<div id="map" style="width:100%; height: 80%;"></div>
+
+<script src="https://maps.googleapis.com/maps/api/js"></script>
+
+<script>
+	var map_parameters = { center: {lat: 60.490, lng: 10.585}, zoom: 8, mapTypeId: 'satellite' };
+	var map = new google.maps.Map(document.getElementById('map'), map_parameters);
+    //map.setMapTypeId("sattelite");
+	var flag = 'http://maps.google.com/mapfiles/ms/icons/purple-dot.png';
+    var info = new google.maps.InfoWindow();
+
+    const myLatlng = { lat: -25.363, lng: 131.044 };
+    var marker = new google.maps.Marker({
+        position: myLatlng,
+        map,
+        title: "Click to zoom",
+        draggable: true
+    });
+
+    marker.addListener('click', marker_clicked);
+    marker.addListener('dragend', marker_clicked);
+
+	function marker_clicked(event) 
+	{ 
+		info.setContent("position: " + marker.position); 
+		info.open(map, this);
+	}
+
+    function map_clicked(event)
+    {
+        marker.setPosition(event.latLng);
+        info.setContent("position: " + marker.position); 
+    }
+
+    function map_dbl_clicked(event)
+    {
+        if (map.mapTypeId=="satellite")
+        {
+            map.mapTypeId = "terrain";
+        }
+        else
+        {
+            map.mapTypeId = "satellite";
+        }
+    }
+
+    map.addListener('click', map_clicked);
+    map.addListener('dblclick', map_dbl_clicked);
+</script>
+</body>
+</html>
